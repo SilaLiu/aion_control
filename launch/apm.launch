@@ -12,7 +12,7 @@
     <arg name="use_bt_joystick" default="false" />
 
     <param if="$(arg use_rosbot)" name="use_sim_time" value="false"/>
-    <param name="robot_description" command="$(find xacro)/xacro '$(find r1_description)/urdf/r1_sim.urdf.xacro' --inorder" />
+    <param name="robot_description" command="$(find xacro)/xacro '$(find aion_r1_description)/urdf/r1_sim.urdf.xacro' --inorder" />
 
     <node
         name="tf_footprint_base"
@@ -66,7 +66,7 @@
     <arg name="joy_dev" default="/dev/input/js0" />
     <arg name="config_filepath" default="$(find teleop_twist_joy)/config/$(arg joy_config).config.yaml" />
     
-    <rosparam command="load" file="$(find r1_control)/config/teleop.yaml" />    
+    <rosparam command="load" file="$(find aion_control)/config/teleop.yaml" />    
     
     <node if="$(arg use_bt_joystick)" pkg="joy" type="joy_node" name="joy_node">
         <param name="dev" value="$(arg joy_dev)" />
