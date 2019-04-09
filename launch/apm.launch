@@ -10,6 +10,7 @@
     <arg name="pluginlists_yaml" default="$(find mavros)/launch/apm_pluginlists.yaml" />
     <arg name="config_yaml" default="$(find mavros)/launch/apm_config.yaml" />
     <arg name="use_bt_joystick" default="false" />
+    <arg name="use_mavros" default="true" />
 
     <param if="$(arg use_rosbot)" name="use_sim_time" value="false"/>
     <param name="robot_description" command="$(find xacro)/xacro '$(find aion_r1_description)/urdf/r1_sim.urdf.xacro' --inorder" />
@@ -41,7 +42,7 @@
         args="0 0 0 0 0 0 base_link fcu 100">
     </node>
     
-    <node pkg="mavros" type="mavros_node" name="mavros" required="$(eval not respawn_mavros)" clear_params="true" respawn="$(arg respawn_mavros)">
+    <node if="$(arg use_mavros)" pkg="mavros" type="mavros_node" name="mavros" required="$(eval not respawn_mavros)" clear_params="true" respawn="$(arg respawn_mavros)">
         <param name="fcu_url" value="$(arg fcu_url)" />
         <param name="gcs_url" value="$(arg gcs_url)" />
         <param name="target_system_id" value="$(arg tgt_system)" />
