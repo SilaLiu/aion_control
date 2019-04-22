@@ -59,6 +59,8 @@
         <!-- Topic Remaps for use on ROS -->
         <remap from="/mavros/vision_pose/pose" to="/robot_pose" />
         <remap from="/mavros/setpoint_velocity/cmd_vel_unstamped" to="/cmd_vel" />
+        <!-- Needs MAVROS changes -->
+        <remap from="/mavros/obstacle/send" to="/zed/scan" />
     </node>
 
     <remap from="/pose" to="/robot_pose" />
