@@ -178,6 +178,16 @@ include_directories(
 #   PATTERN ".svn" EXCLUDE
 # )
 
+foreach(dir launch)
+	install(DIRECTORY ${dir}/
+		DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
+endforeach(dir)
+
+foreach(dir config)
+	install(DIRECTORY ${dir}/
+		DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
+endforeach(dir)
+
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
 #   # myfile1
