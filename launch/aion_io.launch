@@ -13,6 +13,7 @@
     <arg name="config_yaml"         default="$(find mavros)/launch/apm_config.yaml" />
     <arg name="use_bt_joystick"     default="false" />
     <arg name="use_mavros"          default="true" />
+    <arg name="use_cloudwatch"      default="false" />
 
     <param if="$(arg use_rosbot)" name="use_sim_time" value="false"/>
     <param if="$(eval ugv_model == 'r1')" name="robot_description" command="$(find xacro)/xacro '$(find aion_r1_description)/urdf/r1_sim.urdf.xacro'" />
@@ -92,12 +93,9 @@
         <param name="autorepeat_rate" value="20" />
     </node>
 
-    <include if="$(arg use_cloudwatch)" file="$(find cloudwatch_metrics_collector)/launch/cloudwatch_metrics_collector.launch">
-	<arg name="launch_cartographer" value="false" />
-    </include> 
+    <include if="$(arg use_cloudwatch)" file="$(find cloudwatch_metrics_collector)/launch/cloudwatch_metrics_collector.launch" />
 
-    <include if="$(arg use_realsense)" file="$(find aion_navigator_adv)/launch/aion_realsense.launch" />
-   
+ 
     <node if="$(arg use_bt_joystick)" pkg="teleop_twist_joy" name="teleop_twist_joy" type="teleop_node" />
 
 </launch>
