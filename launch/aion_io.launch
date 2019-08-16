@@ -1,35 +1,26 @@
 <launch>
-    <arg name="use_rosbot" default="true" />
-    <arg name="fcu_url" default="udp://:14551@" />
-    <arg name="gcs_url" default="" />
-    <arg name="tgt_system" default="1" />
-    <arg name="tgt_component" default="1" />
-    <arg name="log_output" default="screen" />
-    <arg name="mavros_output" default="log" />
-    <arg name="fcu_protocol" default="v2.0" />
-    <arg name="respawn_mavros" default="false" />
-    <arg name="pluginlists_yaml" default="$(find mavros)/launch/apm_pluginlists.yaml" />
-    <arg name="config_yaml" default="$(find aion_control)/config/apm_config.yaml" />
-    <arg name="use_bt_joystick" default="false" />
-    <arg name="use_mavros" default="true" />
-    <arg name="use_cloudwatch" default="false" />
-    <arg name="use_realsense" default="false" />
+    <arg name="use_rosbot"          default="true" />
+    <arg name="ugv_model"           default="m6" />
+    <arg name="fcu_url"             default="udp://:14551@" />
+    <arg name="gcs_url"             default="" />
+    <arg name="tgt_system"          default="1" />
+    <arg name="tgt_component"       default="1" />
+    <arg name="log_output"          default="screen" />
+    <arg name="mavros_output"       default="screen" />
+    <arg name="fcu_protocol"        default="v2.0" />
+    <arg name="respawn_mavros"      default="false" />
+    <arg name="pluginlists_yaml"    default="$(find mavros)/launch/apm_pluginlists.yaml" />
+    <arg name="config_yaml"         default="$(find mavros)/launch/apm_config.yaml" />
+    <arg name="use_bt_joystick"     default="false" />
+    <arg name="use_mavros"          default="true" />
 
     <param if="$(arg use_rosbot)" name="use_sim_time" value="false"/>
-    <param name="robot_description" command="$(find xacro)/xacro '$(find aion_r1_description)/urdf/r1_sim.urdf.xacro' --inorder" />
-
-    <node
-        name="tf_footprint_base"
-        pkg="tf"
-        type="static_transform_publisher"
-        args="0 0 0 0 0 0 base_link base_footprint 40">
-    </node>
-   
-    <node
-        name="tf_top_link"
-        pkg="tf"
-        type="static_transform_publisher"
-        args="0 0 0.114485752303901 0 0 0 base_link top_link 40">
+    <param if="$(eval ugv_model == 'r1')" name="robot_description" command="$(find xacro)/xacro '$(find aion_r1_description)/urdf/r1_sim.urdf.xacro'" />
+    <param if="$(eval ugv_model == 'm6')" name="robot_description" command="$(find xacro)/xacro '$(find aion_m6_description)/urdf/m6.urdf.xacro'" />
+ 
+    <node name="robot_state_publisher"
+        pkg="robot_state_publisher"
+        type="robot_state_publisher">
     </node>
 
     <node name="robot_pose_publisher"
@@ -37,13 +28,31 @@
         type="robot_pose_publisher"
         respawn="false"
         output="screen">
+        <!--
+        <param name="map_frame" value="/camera2_odom_frame" />
+        -->
     </node>
 
-    <node name="base_to_fcu_broadcaster"
+    <node name="fcu_to_fcu_broadcaster"
         pkg="tf"
         type="static_transform_publisher"
-        args="0 0 0 0 0 0 base_link fcu 100">
+        args="0 0 0 0 0 0 fcu_link fcu 100">
     </node>
+    <!--
+    <node
+        name="tf_footprint_base"
+        pkg="tf"
+        type="static_transform_publisher"
+        args="0 0 0 0 0 0 base_link base_footprint 40">
+    </node>
+
+    <node
+        name="tf_top_link"
+        pkg="tf"
+        type="static_transform_publisher"
+        args="0 0 0.114485752303901 0 0 0 base_link top_link 40">
+    </node>
+    -->
     
     <node if="$(arg use_mavros)" pkg="mavros" type="mavros_node" name="mavros" required="$(eval not respawn_mavros)" clear_params="true" output="$(arg mavros_output)" respawn="$(arg respawn_mavros)">
         <param name="fcu_url" value="$(arg fcu_url)" />
@@ -62,10 +71,13 @@
         <remap from="/mavros/vision_pose/pose" to="/robot_pose" />
         <remap from="/mavros/setpoint_velocity/cmd_vel_unstamped" to="/cmd_vel" />
         <!-- Needs MAVROS changes -->
-        <remap from="/mavros/obstacle/send" to="/scan" />
+        <remap from="/mavros/obstacle/send" to="/camera1/scan" />
     </node>
-
+    
+    <!--
     <remap from="/pose" to="/robot_pose" />
+    -->
+    
   
     <!-- Joystick Interface Launch  -->
     <arg name="joy_config" default="ps3" />
