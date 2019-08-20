@@ -5,7 +5,6 @@
     <arg name="gcs_url"             default=""                  />
     <arg name="tgt_system"          default="1"                 />
     <arg name="tgt_component"       default="1"                 />
-    <arg name="log_output"          default="screen"            />
     <arg name="mavros_output"       default="screen"            />
     <arg name="fcu_protocol"        default="v2.0"              />
     <arg name="respawn_mavros"      default="false"             />
@@ -17,7 +16,7 @@
     <arg name="use_realsense"       default="false"             />
 
     <param if="$(arg use_rosbot)" name="use_sim_time" value="false"/>
-    
+
     <param if="$(eval ugv_model == 'r1')" name="robot_description" command="$(find xacro)/xacro '$(find aion_r1_description)/urdf/r1_sim.urdf.xacro'" />
     <param if="$(eval ugv_model == 'm6')" name="robot_description" command="$(find xacro)/xacro '$(find aion_m6_description)/urdf/m6.urdf.xacro'" />
  
