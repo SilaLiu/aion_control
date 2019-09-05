@@ -30,9 +30,9 @@
         type="robot_pose_publisher"
         respawn="false"
         output="screen">
-        <!--
-        <param name="map_frame" value="/camera2_odom_frame" />
-        -->
+        
+        <param name="is_stamped" value="true" />
+        
     </node>
 
     <node name="fcu_to_fcu_broadcaster"
