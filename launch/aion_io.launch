@@ -41,6 +41,12 @@
         args="0 0 0 0 0 0 fcu_link fcu 100">
     </node>
     
+    <node name="base_link_to_Sensor_broadcaster"
+        pkg="tf"
+        type="static_transform_publisher"
+        args="0.2250 0 0.3867 0 0 0 base_link Sensor 100">
+    </node>
+
     <node if="$(arg use_mavros)" pkg="mavros" type="mavros_node" name="mavros" required="$(eval not respawn_mavros)" clear_params="true" output="$(arg mavros_output)" respawn="$(arg respawn_mavros)">
         <param name="fcu_url" value="$(arg fcu_url)" />
         <param name="gcs_url" value="$(arg gcs_url)" />
@@ -58,7 +64,10 @@
         <remap from="/mavros/vision_pose/pose" to="/camera2/vision_pose" />
         <remap from="/mavros/setpoint_velocity/cmd_vel_unstamped" to="/cmd_vel" />
         <!-- Needs MAVROS changes -->
-        <remap from="/mavros/obstacle/send" to="/camera1/scan" />
+        <remap from="/mavros/obstacle/send" to="/scan" />
+        <!-- <remap from="/move_base_simple/goal" to="/mavros/setpoint_position/cmd_pos" /> -->
+        <remap from="/mavros/setpoint_position/cmd_pos" to="/move_base_simple/goal" />
+
     </node>
     
     <!--
@@ -85,4 +94,16 @@
         </node>
     </group>
 
+    <include file="$(find quanergy_client_ros)/launch/client.launch">
+            <arg name="host" value="192.168.1.3"/>
+    </include>
+
+    <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan">
+        <remap from="cloud_in" to="/Sensor/points"/>
+	<param name="angle_min"  value="-0.785398" />
+	<param name="angle_max"  value="0.785398" />
+        <param name="min_height" value="-0.30" />
+        <param name="max_height" value="1" />
+        <param name="angle_increment" value="0.00872665" />
+    </node>
 </launch>
