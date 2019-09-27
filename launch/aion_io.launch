@@ -14,6 +14,7 @@
     <arg name="use_mavros"          default="true"              />
     <arg name="use_cloudwatch"      default="false"             />
     <arg name="use_realsense"       default="false"             />
+    <arg name="use_M8"              default="true"              />
 
     <param if="$(arg use_rosbot)" name="use_sim_time" value="false"/>
 
@@ -64,7 +65,9 @@
     <!--
     <remap from="/pose" to="/robot_pose" />
     -->
-   
+    
+    <include if="$(arg use_M8)" file="$(find aion_navigator_adv)/launch/aion_quanergylidar.launch" />   
+
     <include if="$(arg use_cloudwatch)" file="$(find cloudwatch_metrics_collector)/launch/cloudwatch_metrics_collector.launch" />
 
     <include if="$(arg use_realsense)" file="$(find aion_navigator_adv)/launch/aion_realsense.launch" />
