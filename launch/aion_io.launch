@@ -1,6 +1,6 @@
 <launch>
     <arg name="use_rosbot"          default="true"              />
-    <arg name="ugv_model"           default="m6"                />
+    <arg name="ugv_model"           default="atv"               />
     <arg name="fcu_url"             default="udp://:14551@"     />
     <arg name="gcs_url"             default=""                  />
     <arg name="tgt_system"          default="1"                 />
@@ -21,7 +21,8 @@
 
     <param if="$(eval ugv_model == 'r1')" name="robot_description" command="$(find xacro)/xacro '$(find aion_r1_description)/urdf/r1_sim.urdf.xacro'" />
     <param if="$(eval ugv_model == 'm6')" name="robot_description" command="$(find xacro)/xacro '$(find aion_m6_description)/urdf/m6.urdf.xacro'" />
- 
+    <param if="$(eval ugv_model == 'atv')" name="robot_description" command="$(find xacro)/xacro '$(find aion_atv_description)/urdf/ATV.urdf.xacro'" />
+
     <node name="robot_state_publisher"
         pkg="robot_state_publisher"
         type="robot_state_publisher">
