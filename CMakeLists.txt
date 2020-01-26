@@ -9,6 +9,7 @@ project(aion_control)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   mavros
+  hector_imu_attitude_to_tf
   robot_pose_publisher
   tf
 )
