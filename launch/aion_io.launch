@@ -18,13 +18,28 @@
     <arg name="use_imu"             default="true"             />	
 
     <param if="$(arg use_rosbot)" name="use_sim_time" value="false"/>
-
-    <param if="$(eval ugv_model == 'r1')" name="robot_description" command="$(find xacro)/xacro '$(find aion_r1_description)/urdf/r1_sim.urdf.xacro'" />
     
+<!-- TODO FIX Transform for R1 an R6-->
+    <group if="$(eval ugv_model == 'r1')" ns="r1">
+        <param name="robot_description" command="$(find xacro)/xacro '$(find aion_r1_description)/urdf/r1_sim.urdf.xacro'" />
+         <node if="$(arg use_imu)" name="base_stabilized_to_base_footprint"
+            pkg="tf"
+            type="static_transform_publisher"
+            args="0 0 -0.1685 0 0 0 base_stabilized base_footprint 100">
+        </node>
+    </group>   
     
+    <group if="$(eval ugv_model == 'r6')" ns="r6">
+        <param name="/robot_description" command="$(find xacro)/xacro '$(find aion_r6_description)/urdf/r6.urdf.xacro'" />
+        <node if="$(arg use_imu)" name="base_stabilized_to_base_footprint"
+            pkg="tf"
+            type="static_transform_publisher"
+            args="0 0 -0.1685 0 0 0 base_stabilized base_footprint 100">
+        </node>
+    </group>
 
     <group if="$(eval ugv_model == 'm6')" ns="m6">
-        <param name="robot_description" command="$(find xacro)/xacro '$(find aion_m6_description)/urdf/m6.urdf.xacro'" />
+        <param name="/robot_description" command="$(find xacro)/xacro '$(find aion_m6_description)/urdf/m6.urdf.xacro'" />
         <node if="$(arg use_imu)" name="base_stabilized_to_base_footprint"
             pkg="tf"
             type="static_transform_publisher"
@@ -33,7 +48,7 @@
     </group>
 
     <group if="$(eval ugv_model == 'atv')" ns="atv">
-        <param name="robot_description" command="$(find xacro)/xacro '$(find aion_atv_description)/urdf/ATV.urdf.xacro'" />
+        <param name="/robot_description" command="$(find xacro)/xacro '$(find aion_atv_description)/urdf/ATV.urdf.xacro'" />
         <node if="$(arg use_imu)" name="base_stabilized_to_base_footprint"
             pkg="tf"
             type="static_transform_publisher"
