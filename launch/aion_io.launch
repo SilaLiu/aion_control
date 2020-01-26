@@ -20,8 +20,26 @@
     <param if="$(arg use_rosbot)" name="use_sim_time" value="false"/>
 
     <param if="$(eval ugv_model == 'r1')" name="robot_description" command="$(find xacro)/xacro '$(find aion_r1_description)/urdf/r1_sim.urdf.xacro'" />
-    <param if="$(eval ugv_model == 'm6')" name="robot_description" command="$(find xacro)/xacro '$(find aion_m6_description)/urdf/m6.urdf.xacro'" />
-    <param if="$(eval ugv_model == 'atv')" name="robot_description" command="$(find xacro)/xacro '$(find aion_atv_description)/urdf/ATV.urdf.xacro'" />
+    
+    
+
+    <group if="$(eval ugv_model == 'm6')" ns="m6">
+        <param name="robot_description" command="$(find xacro)/xacro '$(find aion_m6_description)/urdf/m6.urdf.xacro'" />
+        <node if="$(arg use_imu)" name="base_stabilized_to_base_footprint"
+            pkg="tf"
+            type="static_transform_publisher"
+            args="0 0 -0.1685 0 0 0 base_stabilized base_footprint 100">
+        </node>
+    </group>
+
+    <group if="$(eval ugv_model == 'atv')" ns="atv">
+        <param name="robot_description" command="$(find xacro)/xacro '$(find aion_atv_description)/urdf/ATV.urdf.xacro'" />
+        <node if="$(arg use_imu)" name="base_stabilized_to_base_footprint"
+            pkg="tf"
+            type="static_transform_publisher"
+            args="0.111 0.305 0.626 0 0 0 base_stabilized base_footprint 100">
+        </node>
+    </group>
 
     <node name="robot_state_publisher"
         pkg="robot_state_publisher"
@@ -43,13 +61,7 @@
         type="static_transform_publisher"
         args="0 0 0 0 0 0 fcu_link fcu 100">
     </node>
-
-    <node if="$(arg use_imu)" name="base_stabilized_to_base_footprint"
-        pkg="tf"
-        type="static_transform_publisher"
-        args="0 0 -0.1685 0 0 0 base_stabilized base_footprint 100">
-    </node>
-    
+  
     <node if="$(arg use_imu)" pkg="hector_imu_attitude_to_tf" type="imu_attitude_to_tf_node" name="imu_to_base_link_tf_node" output="screen">
         <remap from="imu_topic" to="/mavros/imu/data" />
         <param name="base_stabilized_frame" type="string" value="base_stabilized" />
