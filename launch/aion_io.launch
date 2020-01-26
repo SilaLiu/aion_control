@@ -80,7 +80,7 @@
     <node if="$(arg use_imu)" pkg="hector_imu_attitude_to_tf" type="imu_attitude_to_tf_node" name="imu_to_base_link_tf_node" output="screen">
         <remap from="imu_topic" to="/mavros/imu/data" />
         <param name="base_stabilized_frame" type="string" value="base_stabilized" />
-        <param name="base_frame" type="string" value="fcu_link" />
+        <param name="base_frame" type="string" value="base_dummy" />
     </node>
 
     <node if="$(arg use_mavros)" pkg="mavros" type="mavros_node" name="mavros" required="$(eval not respawn_mavros)" clear_params="true" output="$(arg mavros_output)" respawn="$(arg respawn_mavros)">
