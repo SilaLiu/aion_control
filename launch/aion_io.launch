@@ -1,6 +1,6 @@
 <launch>
     <arg name="use_rosbot"          default="true"              />
-    <arg name="ugv_model"           default="atv"               />
+    <arg name="ugv_model"           default="r1"                />
     <arg name="fcu_url"             default="udp://:14551@"     />
     <arg name="gcs_url"             default=""                  />
     <arg name="tgt_system"          default="1"                 />
@@ -12,9 +12,6 @@
     <arg name="config_yaml"         default="$(find mavros)/launch/apm_config.yaml" />
     <arg name="use_bt_joystick"     default="false"             />
     <arg name="use_mavros"          default="true"              />
-    <arg name="use_cloudwatch"      default="false"             />
-    <arg name="use_realsense"       default="false"             />
-    <arg name="use_M8"              default="false"             />
     <arg name="use_imu"             default="true"              />	
     <arg name="use_gazebo"          default="false"             />
  
@@ -108,12 +105,6 @@
     <remap from="/pose" to="/robot_pose" />
     -->
     
-    <include if="$(arg use_M8)" file="$(find aion_navigator_adv)/launch/aion_quanergylidar.launch" />   
-
-    <include if="$(arg use_cloudwatch)" file="$(find cloudwatch_metrics_collector)/launch/cloudwatch_metrics_collector.launch" />
-
-    <include if="$(arg use_realsense)" file="$(find aion_navigator_adv)/launch/aion_realsense.launch" />
-
     <group if="$(arg use_gazebo)">
         <include file="$(find gazebo_ros)/launch/empty_world.launch" />
         <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model r1_sim" output="screen" />
