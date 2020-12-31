@@ -20,11 +20,11 @@
 
 <!-- TODO FIX Transform for R1 an R6-->
     <group if="$(eval ugv_model == 'r1')">
-        <param name="robot_description" command="$(find xacro)/xacro '$(find aion_r1_description)/urdf/r1_sim.urdf.xacro'" />
+        <param name="robot_description" command="$(find xacro)/xacro '$(find aion_r1_description)/urdf/r1.urdf.xacro'" />
          <node if="$(arg use_imu)" name="base_stabilized_to_base_footprint"
             pkg="tf"
             type="static_transform_publisher"
-            args="0 0 -0.1685 0 0 0 base_stabilized base_footprint 100">
+            args="0 0 0.1125 0 0 0 base_footprint base_stabilized 100">
         </node>
     </group>   
     
@@ -51,7 +51,7 @@
         <node if="$(arg use_imu)" name="base_stabilized_to_base_footprint"
             pkg="tf"
             type="static_transform_publisher"
-            args="0.111 0.305 s0.626 0 0 0 base_footprint base_stabilized 100">
+            args="0.111 0.305 0.626 0 0 0 base_footprint base_stabilized 100">
         </node>
     </group>
 
