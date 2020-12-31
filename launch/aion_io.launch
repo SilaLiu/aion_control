@@ -1,6 +1,6 @@
 <launch>
     <arg name="use_rosbot"          default="true"              />
-    <arg name="ugv_model"           default="r1"                />
+    <arg name="ugv_model"           default="none"              />
     <arg name="fcu_url"             default="udp://:14551@"     />
     <arg name="gcs_url"             default=""                  />
     <arg name="tgt_system"          default="1"                 />
@@ -12,8 +12,9 @@
     <arg name="config_yaml"         default="$(find mavros)/launch/apm_config.yaml" />
     <arg name="use_bt_joystick"     default="false"             />
     <arg name="use_mavros"          default="true"              />
-    <arg name="use_imu"             default="true"              />	
+    <arg name="use_imu"             default="false"              />	
     <arg name="use_gazebo"          default="false"             />
+    <arg name="use_tf"              default="false"             />
  
     <param if="$(arg use_rosbot)" name="use_sim_time" value="false"/>
 
@@ -54,12 +55,12 @@
         </node>
     </group>
 
-    <node name="robot_state_publisher"
+    <node if="$(arg use_tf)" name="robot_state_publisher"
         pkg="robot_state_publisher"
         type="robot_state_publisher">
     </node>
 
-    <node name="robot_pose_publisher"
+    <node if="$(arg use_tf)" name="robot_pose_publisher"
         pkg="robot_pose_publisher"
         type="robot_pose_publisher"
         respawn="false"
@@ -69,7 +70,7 @@
         
     </node>
 
-    <node name="fcu_to_fcu_broadcaster"
+    <node if="$(arg use_tf)" name="fcu_to_fcu_broadcaster"
         pkg="tf"
         type="static_transform_publisher"
         args="0 0 0 0 0 0 fcu_link fcu 100">
