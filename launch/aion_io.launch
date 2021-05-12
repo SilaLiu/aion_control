@@ -38,6 +38,11 @@
 
     <group if="$(eval ugv_model == 'm6v2')">
         <param name="/robot_description" command="$(find xacro)/xacro '$(find aion_m6v2_description)/urdf/m6v2.urdf.xacro'" />
+        <node if="$(arg use_imu)" name="base_stabilized_to_base_footprint"
+            pkg="tf"
+            type="static_transform_publisher"
+            args="0 0 -0.2843 0 0 0 base_stabilized base_footprint 100">
+        </node>
     </group>
 
     <group if="$(eval ugv_model == 'm6')">
@@ -63,7 +68,7 @@
         type="robot_state_publisher">
     </node>
 
-    <node name="robot_pose_publisher"
+    <!-- <node name="robot_pose_publisher"
         pkg="robot_pose_publisher"
         type="robot_pose_publisher"
         respawn="false"
@@ -71,7 +76,7 @@
         
         <param name="is_stamped" value="true" />
         
-    </node>
+    </node> -->
 
     <node name="fcu_to_fcu_broadcaster"
         pkg="tf"
@@ -82,7 +87,7 @@
     <node if="$(arg use_imu)" pkg="hector_imu_attitude_to_tf" type="imu_attitude_to_tf_node" name="imu_to_base_link_tf_node" output="screen">
         <remap from="imu_topic" to="/mavros/imu/data" />
         <param name="base_stabilized_frame" type="string" value="base_stabilized" />
-        <param name="base_frame" type="string" value="base_dummy" />
+        <param name="base_frame" type="string" value="center_link" />
     </node>
 
     <node if="$(arg use_mavros)" pkg="mavros" type="mavros_node" name="mavros" required="$(eval not respawn_mavros)" clear_params="true" output="$(arg mavros_output)" respawn="$(arg respawn_mavros)">
