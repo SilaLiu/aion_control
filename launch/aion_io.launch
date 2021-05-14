@@ -120,6 +120,9 @@
         <node name="fake_joint_calibration" pkg="rostopic" type="rostopic" args="pub /calibrated std_msgs/Bool true" />
         <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
         <node name="rviz" pkg="rviz" type="rviz" args="-d $(find aion_r1_gazebo)/rviz/gazebo.rviz" />
+        <include file="$(find aion_navigator_adv)/launch/aion_ouster_lidar.launch" >
+            <arg name="use_gazebo" value="true"/>
+        </include>
     </group>
 
     <!-- Joystick Interface Launch  -->
