@@ -1,0 +1,14 @@
+<launch>
+    <arg name="world_name"          default="$(find aion_m6v2_gazebo)/models/simple_obstacles.world"/>
+    <include file="$(find gazebo_ros)/launch/empty_world.launch" >
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="gui" value="true"/>
+        <arg name="headless" value="false"/>
+        <arg name="debug" value="false"/>
+        <arg name="verbose" value="true"/>
+        <arg name="world_name" value="$(arg world_name)"/>
+    </include>
+    <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model m6" output="screen" />
+     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find aion_m6v2_gazebo)/rviz/gazebo.rviz" />
+</launch>
